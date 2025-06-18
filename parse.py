@@ -5,7 +5,9 @@ from models import Company
 from database_utils import use_db, save_company_to_db
 import re
 import json
-BASE_URL = "https://www.bbb.org"
+
+
+BBB_URL = "https://www.bbb.org"
 
 #find_country = ["US", "CAN"]
 

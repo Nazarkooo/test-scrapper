@@ -1,15 +1,10 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
 
 @dataclass
 class Company:
     company_id: str
-    category: str
     brand: str
-    phone: Optional[List[str]]
+    phone: str
     address: str
-    city: str
-    state: str
-    postalCode: int
-    reportUrl: str
     owner: Optional[str]
