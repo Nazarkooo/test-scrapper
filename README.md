@@ -79,15 +79,8 @@ project_root/
    cd uk  # or us, ca, au, nz
    ```
 
-5. **Run the city scraper first:**
 
-   ```bash
-   python city_scraper.py
-   ```
-
-   Wait for it to finish. It will generate a `*_city_autocomplete.json` file.
-
-6. **Run the business scraper next:**
+5. **Run the business scraper:**
 
    ```bash
    python business_scraper.py
@@ -132,5 +125,6 @@ See `requirements.txt` for full list.
 ## ❗ Notes
 
 - Some directories (like AU) require Cloudflare bypassing; handled using `seleniumbase` with `uc=True`.
+- Some scrapper require API key that can be found in cookie when interacting with site from real browser!
 - Scraping time varies by country — be patient.
 - Internet connection and up-to-date Chrome browser required.
