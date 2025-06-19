@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import json
 import os
-
+from urllib.parse import quote_plus
 WAIT_TIMEOUT = 15
 PAGE_COUNT = 20
 INPUT_JSON = "yell_uk_city_autocomplete.json"
@@ -35,7 +35,7 @@ try:
                 print(f"  - Page {page_num} already scraped, skipping")
                 continue
 
-            url = BASE_URL.format(town=town.replace(" ", "+"), page=page_num)
+            url = BASE_URL.format(town=quote_plus(town), page=page_num)
             print(f"  🔄 Page {page_num}: {url}")
 
             driver = Driver(uc=True)

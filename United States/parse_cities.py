@@ -2,8 +2,8 @@ import time
 import json
 import string
 import cloudscraper
-
-BASE_URL = "https://www.yell.com/autocomplete/autoComplete.do?type=location&value="
+from urllib.parse import quote
+BASE_URL = "https://www.bbb.org/api/suggest/location?country=USA&input={}&maxMatches=100"
 
 scraper = cloudscraper.create_scraper(
     interpreter="nodejs",
@@ -34,13 +34,12 @@ headers = {
 
 
 # Generate prefixes (A, B, ..., AZ, Ba, ..., etc.)
-prefixes = [a + b for a in string.ascii_uppercase for b in string.ascii_lowercase]
-
+prefixes = [a for a in string.ascii_uppercase]
 results = []
 seen = set()
 
 for prefix in prefixes:
-    url = BASE_URL + prefix
+    url = BASE_URL.format(quote(prefix))
     try:
         print("trying:", url)
         response = scraper.get(url, headers=headers)
@@ -48,7 +47,7 @@ for prefix in prefixes:
             print(f"✔️ Fetched: {prefix}")
             data = response.json()
             for item in data:
-                value = item.get("name")
+                value = item.get("displayText")
                 if value and value not in seen:
                     seen.add(value)
                     results.append(value)
@@ -60,7 +59,7 @@ for prefix in prefixes:
     time.sleep(0.2)
 
 # Save to JSON
-with open("yell_uk_city_autocomplete.json", "w", encoding="utf-8") as f:
-    json.dump(sorted(results), f, ensure_ascii=False, indent=4)
+    with open("us_city_autocomplete.json", "w", encoding="utf-8") as f:
+        json.dump(sorted(results), f, ensure_ascii=False, indent=4)
 
-print(f"✅ Saved {len(results)} unique city names to 'yell_uk_city_autocomplete.json'")
+print(f"✅ Saved {len(results)} unique city names to 'us_city_autocomplete.json'")

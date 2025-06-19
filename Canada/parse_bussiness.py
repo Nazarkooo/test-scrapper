@@ -7,8 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 import time
 import json
-import os
-
+from urllib.parse import quote_plus
 # === CONFIG ===
 PAGE_COUNT = 3  # pages per city (can increase later)
 INPUT_JSON = "../canada/canadian_cities_autocomplete.json"
@@ -33,10 +32,9 @@ try:
         city_results = {}
 
         print(f"\n📍 Scraping city: {city}")
-        location = city.replace(" ", "+")  # URL encode like "Toronto, ON" → "Toronto-ON"
         
         for i in range(1, PAGE_COUNT + 1):
-            BASE_URL = f"https://www.yellowpages.ca/search/si/{i}/Roofing/{location}"
+            BASE_URL = f"https://www.yellowpages.ca/search/si/{i}/Roofing/{quote_plus(city)}"
             print(f"  🔄 Page {i}: {BASE_URL}")
             driver.get(BASE_URL)
 
