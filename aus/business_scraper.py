@@ -43,6 +43,7 @@ for town in towns:
     for page_num in range(1, PAGE_COUNT + 1):
 
         if max_count and current_count >= max_count:
+            results_by_town[town][str(page_num)] = []
             break
         # main cycle
 
@@ -142,6 +143,7 @@ for town in towns:
             print(f"  ✅ Saved {len(results)} results for page {page_num}")
 
         except Exception as e:
+            results_by_town[town][str(page_num)] = []
             print(f"⚠️ Error extracting cards on page {page_num}: {e}")
         finally:
             driver.quit()

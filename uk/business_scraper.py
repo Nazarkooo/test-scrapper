@@ -8,8 +8,8 @@ from urllib.parse import quote_plus
 
 WAIT_TIMEOUT = 15
 PAGE_COUNT = 20
-INPUT_JSON = "yell_uk_city_autocomplete.json"
-OUTPUT_JSON = "yell_roofers_by_town.json"
+INPUT_JSON = "uk_city_autocomplete.json"
+OUTPUT_JSON = "uk_results.json"
 BASE_URL = "https://www.yell.com/ucs/UcsSearchAction.do?keywords=Roofing&location={town}&pageNum={page}"
 
 # Load towns (expects list of town strings)

@@ -12,8 +12,8 @@ from urllib.parse import quote_plus
 
 # === CONFIG ===
 PAGE_COUNT = 3  # pages per city (can increase later)
-INPUT_JSON = "canadian_cities_autocomplete.json"
-OUTPUT_JSON = "roofing_businesses_by_city.json"
+INPUT_JSON = "ca_city_autocomplete.json"
+OUTPUT_JSON = "ca_results.json"
 WAIT_TIMEOUT = 15
 
 # === SETUP SELENIUM ===

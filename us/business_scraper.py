@@ -10,7 +10,7 @@ from undetected_chromedriver import Chrome as Driver
 PAGE_COUNT = 10
 WAIT_TIMEOUT = 10
 BASE_URL = "https://www.bbb.org/search?find_country=USA&find_text=roofing+contractors&find_loc={town}&page={page}"
-RESULT_FILE = "bbb_results.json"
+RESULT_FILE = "us_results.json"
 INPUT_JSON = "us_city_autocomplete.json"
 # Load existing results if any
 try:

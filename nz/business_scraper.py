@@ -10,7 +10,7 @@ from urllib.parse import quote_plus
 WAIT_TIMEOUT = 15
 PAGE_COUNT = 20
 INPUT_JSON = "nz_city_autocomplete.json"
-OUTPUT_JSON = "nz_roofers_by_town.json"
+OUTPUT_JSON = "nz_results.json"
 BASE_URL = "https://yellow.co.nz/Rock%20And%20Pillar/Roofing%20Contractors/page/{page}?what=Roofing+Contractors&where={town}"
 
 # Load towns (expects list of town strings)

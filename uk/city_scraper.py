@@ -60,7 +60,7 @@ for prefix in prefixes:
     time.sleep(0.2)
 
 # Save to JSON
-with open("yell_uk_city_autocomplete.json", "w", encoding="utf-8") as f:
+with open("uk_city_autocomplete.json", "w", encoding="utf-8") as f:
     json.dump(sorted(results), f, ensure_ascii=False, indent=4)
 
 print(f"✅ Saved {len(results)} unique city names to 'yell_uk_city_autocomplete.json'")

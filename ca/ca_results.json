@@ -81,24 +81,24 @@
     "Abbotsford, BC": {
         "1": [
             {
-                "name": "Moody Roofing & Repairs",
-                "address": "33152 Myrtle Ave, Mission, BC V2V 5W1",
-                "phone": "604-670-5901"
-            },
-            {
                 "name": "Clearbrook Roofing Ltd",
                 "address": "34313 Farmer Road, Abbotsford, BC V2S 7M4",
                 "phone": "778-769-1585"
             },
             {
-                "name": "Doerksen Roofing",
-                "address": "102-33415 MacLure Rd, Abbotsford, BC V2S 0C4",
-                "phone": "778-769-2635"
+                "name": "Moody Roofing & Repairs",
+                "address": "33152 Myrtle Ave, Mission, BC V2V 5W1",
+                "phone": "604-670-5901"
             },
             {
                 "name": "First Class Roofing",
                 "address": "33106 Huntingdon Rd, Abbotsford, BC V2S 7Z3",
                 "phone": "604-864-4131"
+            },
+            {
+                "name": "Doerksen Roofing",
+                "address": "102-33415 MacLure Rd, Abbotsford, BC V2S 0C4",
+                "phone": "778-769-2635"
             },
             {
                 "name": "Townline Roofing",
@@ -400,7 +400,5 @@
                 "phone": "604-826-3294"
             }
         ]
-    },
-    "Abee, AB": {},
-    "Abercorn, QC": {}
+    }
 }
