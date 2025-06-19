@@ -18,10 +18,13 @@ seen = set()
 
 for prefix in prefixes:
     print(f"🔍 Trying prefix: {prefix}")
-
+    
     payload = {
         "operationName": "autocomplete",
-        "variables": {"type": "where", "term": prefix},
+        "variables": {
+            "type": "where",
+            "term": prefix
+        },
         "query": """
         query autocomplete($type: String, $term: String) {
           autocomplete(searchType: $type, term: $term) {
@@ -31,16 +34,14 @@ for prefix in prefixes:
             __typename
           }
         }
-        """,
+        """
     }
 
     try:
         response = requests.post(API_URL, headers=HEADERS, json=payload)
         if response.status_code == 200:
             data = response.json()
-            locations = (
-                data.get("data", {}).get("autocomplete", {}).get("locations", [])
-            )
+            locations = data.get("data", {}).get("autocomplete", {}).get("locations", [])
             print(f"✔️ Found {len(locations)} results for '{prefix}'")
             for loc in locations:
                 if loc not in seen:
@@ -54,9 +55,7 @@ for prefix in prefixes:
     time.sleep(0.2)
 
 # Save to JSON
-with open("yellow_au_city_autocomplete.json", "w", encoding="utf-8") as f:
+with open("nz_city_autocomplete.json", "w", encoding="utf-8") as f:
     json.dump(sorted(results), f, ensure_ascii=False, indent=2)
 
-print(
-    f"\n✅ Saved {len(results)} unique city names to 'yellow_au_city_autocomplete.json'"
-)
+print(f"\n✅ Saved {len(results)} unique city names to 'nz_city_autocomplete.json'")
