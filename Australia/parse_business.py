@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumbase import Driver
 import time
+
 # Your constants
 PAGE_COUNT = 10
 WAIT_TIMEOUT = 10
@@ -41,7 +42,6 @@ for town in towns:
 
     for page_num in range(1, PAGE_COUNT + 1):
 
-
         if max_count and current_count >= max_count:
             break
         # main cycle
@@ -58,15 +58,22 @@ for town in towns:
         driver.uc_gui_click_captcha()
         wait = WebDriverWait(driver, WAIT_TIMEOUT)
 
-
-        #here
+        # here
         try:
-            wait.until(EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'More info')]")))
-            more_info_buttons = driver.find_elements(By.XPATH, "//div[contains(text(), 'More info')]")
+            wait.until(
+                EC.presence_of_element_located(
+                    (By.XPATH, "//div[contains(text(), 'More info')]")
+                )
+            )
+            more_info_buttons = driver.find_elements(
+                By.XPATH, "//div[contains(text(), 'More info')]"
+            )
             results = []
 
             if not max_count:
-                h2 = driver.find_element(By.XPATH, '//h2[contains(text(), "Results for")]')
+                h2 = driver.find_element(
+                    By.XPATH, '//h2[contains(text(), "Results for")]'
+                )
 
                 match = re.search(r"(\d+)\s+Results", h2.text)
                 max_count = int(match.group(1)) if match else 0
@@ -76,14 +83,19 @@ for town in towns:
 
             for i, btn in enumerate(more_info_buttons):
                 try:
-                    driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
+                    driver.execute_script(
+                        "arguments[0].scrollIntoView({block: 'center'});", btn
+                    )
                     time.sleep(0.2)
                     btn.click()
                     print(f"✅ Clicked 'More info' #{i+1}")
                 except Exception as e:
                     pass
 
-            listings = driver.find_elements(By.XPATH, "//*[contains(@class, 'PaidListing') or contains(@class, 'FreeListing')]")
+            listings = driver.find_elements(
+                By.XPATH,
+                "//*[contains(@class, 'PaidListing') or contains(@class, 'FreeListing')]",
+            )
             current_count += len(listings)
             print(f"🔎 Found {len(listings)} listings")
 
@@ -94,30 +106,30 @@ for town in towns:
                 except:
                     name = "N/A"
 
+                address = "N/A"  # ensure it's always defined
                 try:
-                    try:
-                        link = list.find_elements(By.CSS_SELECTOR, "a[href^='https']")[1]
-                        address = link.text.strip()
-                    except:
-                        full_text = list.find_element(By.XPATH, ".//h3/following::p[1]").text
-                        address = ','.join(full_text.split(',')[1:]).strip()
+                    for a in list.find_elements(By.CSS_SELECTOR, "a[href]"):
+                        text = a.text.strip()
+                        if "," in text:
+                            address = text
+                            break
+                    else:
+                        # fallback only if no a[href] matched
+                        full_text = list.find_element(
+                            By.XPATH, ".//h3/following::p[1]"
+                        ).text
+                        address = ",".join(full_text.split(",")[1:]).strip()
 
-                except:
-                    address = "N/A"
-
-
+                except Exception as e:
+                    pass  # address stays as "N/A"
 
                 try:
                     phone = list.find_element(By.CLASS_NAME, "fXPEMO").text
-                        
+
                 except:
                     phone = "N/A"
 
-                results.append({
-                    "name": name,
-                    "address": address,
-                    "phone": phone
-                })
+                results.append({"name": name, "address": address, "phone": phone})
 
                 print(f"✅ {name} | {address} | {phone}")
 

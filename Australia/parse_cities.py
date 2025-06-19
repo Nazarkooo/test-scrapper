@@ -13,7 +13,7 @@ scraper = cloudscraper.create_scraper(
         "browser": "chrome",
         "platform": "ios",
         "desktop": False,
-    }
+    },
 )
 
 
@@ -32,7 +32,7 @@ headers = {
     "DNT": "1",
     "Priority": "u=0, i",
     "Pragma": "no-cache",
-    "Cache-Control": "no-cache"
+    "Cache-Control": "no-cache",
 }
 
 

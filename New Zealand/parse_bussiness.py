@@ -9,9 +9,9 @@ from urllib.parse import quote_plus
 
 WAIT_TIMEOUT = 15
 PAGE_COUNT = 20
-INPUT_JSON = "yell_uk_city_autocomplete.json"
-OUTPUT_JSON = "yell_roofers_by_town.json"
-BASE_URL = "https://www.yell.com/ucs/UcsSearchAction.do?keywords=Roofing&location={town}&pageNum={page}"
+INPUT_JSON = "nz_city_autocomplete.json"
+OUTPUT_JSON = "nz_roofers_by_town.json"
+BASE_URL = "https://yellow.co.nz/Rock%20And%20Pillar/Roofing%20Contractors/page/{page}?what=Roofing+Contractors&where={town}"
 
 # Load towns (expects list of town strings)
 with open(INPUT_JSON, "r", encoding="utf-8") as f:
@@ -49,7 +49,7 @@ try:
                 try:
                     h4 = driver.find_element(
                         By.XPATH,
-                        '//h1[starts-with(text(), "Sorry,")]',
+                        '//h4[starts-with(text(), "We didn\'t find any businesses matching")]',
                     )
                     print(
                         "❌ No more listings found, stopping pagination for this town."
@@ -57,76 +57,72 @@ try:
                     break
                 except:
                     pass
-
-
-                listings = driver.find_elements(
-                    By.CLASS_NAME, "businessCapsule--mainRow"
+                # Wait for the main column container to appear
+                container = wait.until(
+                    EC.presence_of_element_located(
+                        (
+                            By.XPATH,
+                            "//div[contains(@class, 'flex flex-col') and contains(@class, 'gap-4') and contains(@class, 'mt-4') and contains(@class, 'animate-fade') and contains(@class, 'block')]",
+                        )
+                    )
                 )
 
-                page_results = []
-                seen_addresses = set()
+                # Get all business listing divs inside the container
+                listings = container.find_elements(
+                    By.XPATH,
+                    ".//div[contains(@class, 'flex') and contains(@class, 'gap-4') and contains(@class, 'w-full')]",
+                )
+                print(f"🔎 Found {len(listings)} business listings.")
 
-                for listing in listings:
+                page_results = []
+
+                for idx, listing in enumerate(listings):
                     try:
-                        name = listing.find_element(By.CSS_SELECTOR, "h2").text.strip()
+                        name = listing.find_element(By.TAG_NAME, "h1").text.strip()
                     except:
                         name = "N/A"
 
-                    # Reveal phone(s)
+                    # Try to reveal and get phone
                     try:
-                        phone_label = listing.find_element(
-                            By.CSS_SELECTOR, "label.business--telephone"
+                        phone_button = listing.find_element(
+                            By.XPATH, ".//button[.//span[contains(text(), 'Phone')]]"
                         )
                         driver.execute_script(
                             "arguments[0].scrollIntoView({block: 'center'});",
-                            phone_label,
+                            phone_button,
                         )
-                        time.sleep(0.3)
-                        phone_label.click()
-                        time.sleep(1)
-                    except:
-                        pass
-
-                    try:
-                        phones_wrapper = listing.find_element(
-                            By.CLASS_NAME, "business--multiplePhonesWrapper"
+                        time.sleep(0.2)
+                        phone_button.click()
+                        time.sleep(0.5)  # Let the dropdown show
+                        phone_element = listing.find_element(
+                            By.XPATH, ".//a[starts-with(@href, 'tel:')]"
                         )
-                        phone_spans = phones_wrapper.find_elements(
-                            By.CLASS_NAME, "business--telephoneNumber"
-                        )
-                        phone = ", ".join([span.text.strip() for span in phone_spans])
+                        phone = phone_element.text.strip()
                     except:
                         phone = "N/A"
 
+                    # Try to extract address
                     try:
-                        address_root = listing.find_element(
-                            By.CSS_SELECTOR, '[itemprop="address"]'
+                        address = (
+                            listing.find_element(
+                                By.XPATH, ".//span[@itemprop='address']"
+                            )
+                            .text.replace("\n", " ")
+                            .strip()
                         )
-                        street = address_root.find_element(
-                            By.CSS_SELECTOR, '[itemprop="streetAddress"]'
-                        ).text.strip()
-                        city = address_root.find_element(
-                            By.CSS_SELECTOR, '[itemprop="addressLocality"]'
-                        ).text.strip()
-                        postal = address_root.find_element(
-                            By.CSS_SELECTOR, '[itemprop="postalCode"]'
-                        ).text.strip()
-                        address = f"{street} {city}, {postal}"
+
                     except:
                         address = "N/A"
 
-                    if address in seen_addresses:
-                        continue
-                    seen_addresses.add(address)
-
+                    print(f"✅ {name} | {address} | {phone}")
                     entry = {"name": name, "address": address, "phone": phone}
                     page_results.append(entry)
 
-                results_by_town[town][str(page_num)] = page_results
+                    results_by_town[town][str(page_num)] = page_results
 
-                # Save results after each page
-                with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
-                    json.dump(results_by_town, f, ensure_ascii=False, indent=4)
+                    # Save results after each page
+                    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+                        json.dump(results_by_town, f, ensure_ascii=False, indent=4)
 
             except Exception as e:
                 print(f"    ⚠️ Page {page_num} failed: {e}")

@@ -51,32 +51,44 @@ for town in towns:
 
             for card in cards:
                 try:
-                    name = card.find_element(By.CSS_SELECTOR, "h3.result-business-name span").text.strip()
+                    name = card.find_element(
+                        By.CSS_SELECTOR, "h3.result-business-name span"
+                    ).text.strip()
                     if name == "advertisement:":
                         continue
                 except:
                     name = "N/A"
 
                 try:
-                    info_block = card.find_element(By.CLASS_NAME, "result-business-info")
+                    info_block = card.find_element(
+                        By.CLASS_NAME, "result-business-info"
+                    )
                 except:
                     info_block = None
 
                 try:
-                    phone = info_block.find_element(By.CSS_SELECTOR, 'a[href^="tel:"]').text.strip() if info_block else "N/A"
+                    phone = (
+                        info_block.find_element(
+                            By.CSS_SELECTOR, 'a[href^="tel:"]'
+                        ).text.strip()
+                        if info_block
+                        else "N/A"
+                    )
                 except:
                     phone = "N/A"
 
                 try:
-                    address = info_block.find_element(By.CSS_SELECTOR, "p").text.strip().replace("\n", " ") if info_block else "N/A"
+                    address = (
+                        info_block.find_element(By.CSS_SELECTOR, "p")
+                        .text.strip()
+                        .replace("\n", " ")
+                        if info_block
+                        else "N/A"
+                    )
                 except:
                     address = "N/A"
 
-                results.append({
-                    "name": name,
-                    "phone": phone,
-                    "address": address
-                })
+                results.append({"name": name, "phone": phone, "address": address})
 
             results_by_town[town][str(page_num)] = results
 

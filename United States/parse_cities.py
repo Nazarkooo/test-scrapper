@@ -3,7 +3,10 @@ import json
 import string
 import cloudscraper
 from urllib.parse import quote
-BASE_URL = "https://www.bbb.org/api/suggest/location?country=USA&input={}&maxMatches=100"
+
+BASE_URL = (
+    "https://www.bbb.org/api/suggest/location?country=USA&input={}&maxMatches=100"
+)
 
 scraper = cloudscraper.create_scraper(
     interpreter="nodejs",
@@ -11,7 +14,7 @@ scraper = cloudscraper.create_scraper(
         "browser": "chrome",
         "platform": "ios",
         "desktop": False,
-    }
+    },
 )
 
 
@@ -29,7 +32,7 @@ headers = {
     "Sec-Fetch-Site": "cross-site",
     "Sec-GPC": "1",
     "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0",
 }
 
 
@@ -58,7 +61,7 @@ for prefix in prefixes:
 
     time.sleep(0.2)
 
-# Save to JSON
+    # Save to JSON
     with open("us_city_autocomplete.json", "w", encoding="utf-8") as f:
         json.dump(sorted(results), f, ensure_ascii=False, indent=4)
 

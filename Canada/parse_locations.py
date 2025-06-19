@@ -17,8 +17,9 @@ seen = set()
 results = []
 
 # Generate prefixes to try (you can extend this to 3-letter combos if needed)
-prefixes = list(string.ascii_uppercase) + \
-           [a + b for a in string.ascii_uppercase for b in string.ascii_lowercase]
+prefixes = list(string.ascii_uppercase) + [
+    a + b for a in string.ascii_uppercase for b in string.ascii_lowercase
+]
 
 for prefix in prefixes:
     url = BASE_URL + prefix
@@ -37,7 +38,7 @@ for prefix in prefixes:
             print(f"Skipped {prefix} - HTTP {response.status_code}")
     except Exception as e:
         print(f"Error fetching {prefix}: {e}")
-    
+
     time.sleep(0.2)  # Be gentle with server
 
 # Save results
